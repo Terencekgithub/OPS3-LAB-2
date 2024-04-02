@@ -1,0 +1,102 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {},
+    "functions": [],
+    "variables": {
+        "Vnet": "Virtual_Network_opps3",
+        "subnet-1": "BackEndsubnet",
+        "subnet-2": "FrontEndSubnet",
+        "subnet-3": "DataBaseSubnet"
+    },
+    "resources": [
+        {
+            "name":"NSG_FRONT_END",
+            "type": "Microsoft.Network/networkSecurityGroups",
+            "apiVersion": "2020-11-01",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "securityRules": [
+                    {
+                        "name": "nsgRule1",
+                        "properties": {
+                            "description": "ALLOW TRAFFIC ON PORT 80",
+                            "protocol": "Tcp",
+                            "sourcePortRange": "192.168.0.0/16",
+                            "destinationPortRange": "80",
+                    
+                            "sourceAddressPrefix": "192.168.0.0/16",
+                            "destinationAddressPrefix": "192.168.0.0/16",
+                            "access": "Allow",
+                            "priority": 100,
+                            "direction": "Inbound"
+                        }
+                    }
+                ]
+            }
+        },
+       {
+            "name":"NSG_FRONT_END",
+            "type": "Microsoft.Network/networkSecurityGroups",
+            "apiVersion": "2020-11-01",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "securityRules": [
+                    {
+                        "name": "nsgRule1",
+                        "properties": {
+                            "description": "DENY TRAFFIC ON PORT 22",
+                            "protocol": "Tcp",
+                            "sourcePortRange": "192.168.0.0/16",
+                            "destinationPortRange": "22",
+                    
+                            "sourceAddressPrefix": "192.168.0.0/16",
+                            "destinationAddressPrefix": "192.168.0.0/16",
+                            "access": "DENY",
+                            "priority": 100,
+                            "direction": "Inbound"
+                        }
+                    }
+                ]
+            }
+        }, 
+     {
+        "name": "[variables('Vnet')]",
+        "type": "Microsoft.Network/virtualNetworks",
+        "apiVersion": "2020-11-01",
+        "location": "[resourceGroup().location]",
+        "tags": {
+            "displayName": "virtualNetwork1"
+        },
+        "properties": {
+            "addressSpace": {
+                "addressPrefixes": [
+                    "192.168.0.4"
+                ]
+            },
+            "subnets": [
+                {
+                    "name": "[variables('subnet-1')]",
+                    "properties": {
+                        "addressPrefix": "192.168.0.5"
+                    }
+                },
+                {
+                    "name": "[variables('subnet-2')]",
+                    "properties": {
+                        "addressPrefix": "192.168.0.6"
+                    }
+                },
+
+                 {
+                    "name": "[variables('subnet-3')]",
+                    "properties": {
+                        "addressPrefix": "192.168.0.6"
+                    }
+                }
+            ]
+        }
+     }
+    ],
+    "outputs": {}
+}
